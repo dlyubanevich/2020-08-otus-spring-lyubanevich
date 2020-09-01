@@ -8,8 +8,15 @@
         <constructor-arg name="resource" value="test.csv"/>
     </bean>
 
-    <bean id="testService" class="ru.otus.dlyubanevich.service.TestServiceImpl">
+    <bean id="taskService" class="ru.otus.dlyubanevich.service.TaskServiceImpl">
         <constructor-arg name="taskDao" ref="taskDao"/>
+    </bean>
+
+    <bean id="inputOutputService" class="ru.otus.dlyubanevich.service.InputOutputServiceImpl"/>
+
+    <bean id="testingService" class="ru.otus.dlyubanevich.service.TestingServiceImpl">
+        <constructor-arg name="taskService" ref="taskService"/>
+        <constructor-arg name="inputOutputService" ref="inputOutputService"/>
     </bean>
 
 </beans>
