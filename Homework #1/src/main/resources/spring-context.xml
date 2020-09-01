@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="taskDao" class="ru.otus.dlyubanevich.dao.TaskDaoImpl">
+        <constructor-arg name="resource" value="test.csv"/>
+    </bean>
+
+    <bean id="taskService" class="ru.otus.dlyubanevich.service.TaskServiceImpl">
+        <constructor-arg name="taskDao" ref="taskDao"/>
+    </bean>
+
+    <bean id="inputOutputService" class="ru.otus.dlyubanevich.service.InputOutputServiceImpl"/>
+
+    <bean id="testingService" class="ru.otus.dlyubanevich.service.TestingServiceImpl">
+        <constructor-arg name="taskService" ref="taskService"/>
+        <constructor-arg name="inputOutputService" ref="inputOutputService"/>
+    </bean>
+
+</beans>
