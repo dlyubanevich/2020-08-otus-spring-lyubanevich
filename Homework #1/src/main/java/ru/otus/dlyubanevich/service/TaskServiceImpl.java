@@ -7,7 +7,7 @@ import ru.otus.dlyubanevich.domain.Task;
 import java.util.List;
 
 @Data
-public class TestServiceImpl implements TestService {
+public class TaskServiceImpl implements TaskService {
 
     private final TaskDao taskDao;
 

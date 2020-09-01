@@ -2,7 +2,6 @@ package ru.otus.dlyubanevich.dao;
 
 import com.opencsv.bean.CsvToBeanBuilder;
 import lombok.Data;
-import lombok.Getter;
 import lombok.SneakyThrows;
 import ru.otus.dlyubanevich.domain.Task;
 

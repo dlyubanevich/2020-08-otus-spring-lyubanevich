@@ -4,7 +4,7 @@ import ru.otus.dlyubanevich.domain.Task;
 
 import java.util.List;
 
-public interface TestService {
+public interface TaskService {
 
     List<Task> getTasks();
 
