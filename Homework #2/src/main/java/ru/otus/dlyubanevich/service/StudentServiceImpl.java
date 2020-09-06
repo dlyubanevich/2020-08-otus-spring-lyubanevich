@@ -1,11 +1,11 @@
 package ru.otus.dlyubanevich.service;
 
-import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.otus.dlyubanevich.dao.StudentDao;
 import ru.otus.dlyubanevich.domain.Student;
 
-@Data
+@RequiredArgsConstructor
 @Service
 public class StudentServiceImpl implements StudentService {
 

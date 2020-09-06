@@ -1,7 +1,9 @@
 package ru.otus.dlyubanevich.service;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Scanner;
 
@@ -11,9 +13,10 @@ public class InputOutputServiceImpl implements InputOutputService {
    private final Scanner scanner;
    private final PrintStream printStream;
 
-    public InputOutputServiceImpl() {
-        this.scanner = new Scanner(System.in);
-        this.printStream = System.out;
+    public InputOutputServiceImpl(@Value("#{T(java.lang.System).in}") InputStream inputStream,
+                                  @Value("#{T(java.lang.System).out}") PrintStream printStream) {
+        this.scanner = new Scanner(inputStream);
+        this.printStream = printStream;
     }
 
     @Override

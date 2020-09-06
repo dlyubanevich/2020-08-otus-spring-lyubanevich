@@ -2,7 +2,6 @@ package ru.otus.dlyubanevich.dao;
 
 import com.opencsv.bean.CsvToBeanBuilder;
 import com.opencsv.bean.CsvToBeanFilter;
-import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -13,12 +12,14 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.List;
 
-@NoArgsConstructor
 @Component
-public class TaskDaoImpl implements TaskDao{
+public class TaskDaoCSV implements TaskDao{
 
-    @Value("${resource}")
-    private String resource;
+    private final String resource;
+
+    public TaskDaoCSV(@Value("${resource}") String resource) {
+        this.resource = resource;
+    }
 
     @Override
     public List<Task> getTasks() {

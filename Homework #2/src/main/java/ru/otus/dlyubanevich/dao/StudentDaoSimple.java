@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 import ru.otus.dlyubanevich.domain.Student;
 
 @Component
-public class StudentDaoImpl implements StudentDao {
+public class StudentDaoSimple implements StudentDao {
 
     @Override
     public Student findByName(String name) {

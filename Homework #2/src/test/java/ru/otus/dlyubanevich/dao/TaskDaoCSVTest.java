@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("Класс TaskDaoImpl должен")
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = TestingSpringConfig.class)
-class TaskDaoImplTest {
+class TaskDaoCSVTest {
 
     @Autowired
     private TaskDao taskDao;

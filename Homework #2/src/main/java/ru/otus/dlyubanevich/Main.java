@@ -1,13 +1,10 @@
 package ru.otus.dlyubanevich;
 
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.*;
 import ru.otus.dlyubanevich.service.TestingService;
 
 @ComponentScan
-@PropertySource("classpath:application.properties")
+@PropertySources({@PropertySource("classpath:application.properties"), @PropertySource("classpath:messages.properties")})
 @Configuration
 public class Main {
 

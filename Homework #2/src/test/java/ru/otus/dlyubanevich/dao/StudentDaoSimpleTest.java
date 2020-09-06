@@ -7,9 +7,9 @@ import ru.otus.dlyubanevich.domain.Student;
 import static org.assertj.core.api.Assertions.*;
 
 @DisplayName("Класс StudentDaoImpl должен")
-class StudentDaoImplTest {
+class StudentDaoSimpleTest {
 
-    private final StudentDao studentDao = new StudentDaoImpl();
+    private final StudentDao studentDao = new StudentDaoSimple();
 
     @Test
     @DisplayName("возвращать студента по заданному имени")

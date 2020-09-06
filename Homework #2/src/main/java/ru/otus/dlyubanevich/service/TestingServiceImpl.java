@@ -1,19 +1,20 @@
 package ru.otus.dlyubanevich.service;
 
-import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.otus.dlyubanevich.domain.Student;
 import ru.otus.dlyubanevich.domain.Task;
 
 import java.util.List;
 
-@Data
+@RequiredArgsConstructor
 @Service
 public class TestingServiceImpl implements TestingService {
 
     private final TaskService taskService;
     private final InputOutputService inputOutputService;
     private final StudentService studentService;
+    private final MessageService messageService;
 
     private Student student;
     private int score;
@@ -21,52 +22,62 @@ public class TestingServiceImpl implements TestingService {
     @Override
     public void run() {
         registerStudent();
-        showGreetingMessage();
+        printGreetingMessage();
         testingProcess();
         showResults();
     }
 
     private void registerStudent() {
-        inputOutputService.print("Please, enter your name:");
+        inputOutputService.print(messageService.getStudentNameRequest());
         String name = inputOutputService.scan();
         student = studentService.findByName(name);
     }
 
-    private void showGreetingMessage() {
-        String greeting = "\nHello,my friend! \nI want to know how awesome you are. Answer a few questions:\n";
-        inputOutputService.println(greeting);
+    private void printGreetingMessage() {
+        inputOutputService.println(messageService.getGreetingMessage());
     }
 
     private void testingProcess() {
         List<Task> tasks = taskService.getTasks();
-        for (int i = 0; i < tasks.size(); i++) {
+        for (int taskIndex = 0; taskIndex < tasks.size(); taskIndex++) {
 
-            Task task = tasks.get(i);
+            Task task = tasks.get(taskIndex);
 
-            inputOutputService.println("Question №" + (i+1));
-            inputOutputService.println(task.getQuestion());
-
-            List<String> options = task.getOptions();
-            options.forEach(
-                    option -> inputOutputService.println("\t" + option)
-            );
-
-            int studentAnswer = getStudentAnswer(options.size());
-            score += (studentAnswer == task.getAnswer()) ? 1 : 0;
-            inputOutputService.print("\n");
+            printTask(task, taskIndex+1);
+            updateScore(task);
 
         }
     }
 
+    private void printTask(Task task, int questionNumber) {
+        printQuestion(task.getQuestion(), questionNumber);
+        printOptions(task.getOptions());
+    }
+
+    private void printQuestion(String question, int questionNumber) {
+        inputOutputService.print(messageService.getIndent());
+        inputOutputService.println(messageService.getQuestionInfo(questionNumber));
+        inputOutputService.println(question);
+    }
+
+    private void printOptions(List<String> options) {
+        options.forEach(inputOutputService::println);
+    }
+
+    private void updateScore(Task task) {
+        int studentAnswer = getStudentAnswer(task.getOptions().size());
+        score += (studentAnswer == task.getAnswer()) ? 1 : 0;
+    }
+
     private int getStudentAnswer(int max) {
-        String info = "Please choose option from 1 to " + max + ":";
+        String info = messageService.getOptionsInfo(max);
         int studentAnswer = 0;
         while (studentAnswer == 0){
             inputOutputService.print(info);
             try {
                 studentAnswer = Integer.parseInt(inputOutputService.scan());
             }catch (NumberFormatException exception){
-                inputOutputService.println("\nWrong number format!\n");
+                inputOutputService.println(messageService.getErrorInfo());
             }
             if (studentAnswer > max){
                 studentAnswer = 0;
@@ -76,8 +87,8 @@ public class TestingServiceImpl implements TestingService {
     }
 
     private void showResults() {
-        String result = "Dear " + student.getName() + ".\nYour score is " + score + ". Damn you're good!";
+        String result = messageService.getTestResult(student.getName(), score);
+        inputOutputService.print(messageService.getIndent());
         inputOutputService.println(result);
     }
-
 }
