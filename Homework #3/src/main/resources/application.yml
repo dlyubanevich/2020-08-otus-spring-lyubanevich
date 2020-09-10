@@ -1,0 +1,6 @@
+server:
+  port: 8080
+
+application:
+  testingForm: testing_form_ru.csv
+  locale: ru_RU
