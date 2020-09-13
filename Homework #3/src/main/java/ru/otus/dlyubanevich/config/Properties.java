@@ -7,7 +7,7 @@ import java.util.Locale;
 
 @Data
 @ConfigurationProperties(prefix = "application")
-public class YmlProperties {
+public class Properties {
 
     private String testingForm;
     private Locale locale;

@@ -13,11 +13,13 @@ class StudentDaoSimpleTest {
 
     @Test
     @DisplayName("возвращать студента по заданному имени")
-    void shouldHaveStudent() {
+    void shouldHaveStudentMock() {
         String name = "Ivan";
         assertThat(studentDao.findByName(name))
                 .isNotNull()
                 .hasFieldOrProperty("name")
                 .extracting(Student::getName).isIn(name);
+
     }
+
 }

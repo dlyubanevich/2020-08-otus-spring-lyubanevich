@@ -1,3 +1,15 @@
+
+
 application:
   testingForm: testing_form_ru.csv
   locale: ru_RU
+
+logging:
+  level:
+    root: ERROR
+
+spring:
+  messages:
+    basename: classpath:/i18n/messages
+    encoding: windows-1251
+

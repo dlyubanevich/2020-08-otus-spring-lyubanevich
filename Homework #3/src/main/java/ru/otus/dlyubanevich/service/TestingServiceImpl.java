@@ -1,9 +1,7 @@
 package ru.otus.dlyubanevich.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
-import ru.otus.dlyubanevich.config.YmlProperties;
 import ru.otus.dlyubanevich.domain.Student;
 import ru.otus.dlyubanevich.domain.Task;
 
@@ -16,8 +14,7 @@ public class TestingServiceImpl implements TestingService {
     private final TaskService taskService;
     private final InputOutputService inputOutputService;
     private final StudentService studentService;
-    private final MessageSource messageSource;
-    private final YmlProperties ymlProperties;
+    private final PrintMessageService printMessageService;
 
     private Student student;
     private int score;
@@ -30,62 +27,59 @@ public class TestingServiceImpl implements TestingService {
         showResults();
     }
 
-    private void registerStudent() {
-        inputOutputService.println("");
-        var message = getMessageLocale("student.nameRequest", new String[]{});
-        inputOutputService.print(message);
-        String name = inputOutputService.scan();
+    void registerStudent() {
+        printMessageService.printMessage("student.nameRequest");
+        setCurrentStudent(inputOutputService.scan());
+    }
+
+    private void setCurrentStudent(String name) {
         student = studentService.findByName(name);
     }
 
-    private void printGreetingMessage() {
-        var message = getMessageLocale("message.greeting", new String[]{});
-        inputOutputService.println(message);
+    void printGreetingMessage() {
+        printMessageService.printMessage("message.greeting");
     }
 
-    private void testingProcess() {
+    void testingProcess() {
         List<Task> tasks = taskService.getTasks();
         for (int taskIndex = 0; taskIndex < tasks.size(); taskIndex++) {
-
             Task task = tasks.get(taskIndex);
-
-            printTask(task, taskIndex+1);
+            printQuestionAndOptions(task, taskIndex+1);
             updateScore(task);
-
         }
     }
 
-    private void printTask(Task task, int questionNumber) {
-        printQuestion(task.getQuestion(), questionNumber);
+    void printQuestionAndOptions(Task task, int questionNumber) {
+        printQuestionNumber(questionNumber);
+        printQuestion(task.getQuestion());
         printOptions(task.getOptions());
     }
 
-    private void printQuestion(String question, int questionNumber) {
-        inputOutputService.println("");
-        var message = getMessageLocale("question.info", new String[]{String.valueOf(questionNumber)});
-        inputOutputService.println(message);
+    private void printQuestionNumber(int questionNumber) {
+        printMessageService.printMessage("question.info", String.valueOf(questionNumber));
+    }
+
+    void printQuestion(String question) {
         inputOutputService.println(question);
     }
 
-    private void printOptions(List<String> options) {
+    void printOptions(List<String> options) {
         options.forEach(inputOutputService::println);
     }
 
-    private void updateScore(Task task) {
+    void updateScore(Task task) {
         int studentAnswer = getStudentAnswer(task.getOptions().size());
         score += (studentAnswer == task.getAnswer()) ? 1 : 0;
     }
 
-    private int getStudentAnswer(int max) {
-        var info = getMessageLocale("options.info", new String[]{String.valueOf(max)});
-        var error = getMessageLocale("error.info", new String[]{});
+    int getStudentAnswer(int max) {
         int studentAnswer = 0;
         while (studentAnswer == 0){
-            inputOutputService.print(info);
+            printMessageService.printMessage("options.info", String.valueOf(max));
             try {
                 studentAnswer = Integer.parseInt(inputOutputService.scan());
             }catch (NumberFormatException exception){
-                inputOutputService.println(error);
+                printMessageService.printMessage("error.info");
             }
             if (studentAnswer > max){
                 studentAnswer = 0;
@@ -94,13 +88,8 @@ public class TestingServiceImpl implements TestingService {
         return studentAnswer;
     }
 
-    private void showResults() {
-        inputOutputService.println("");
-        var result = getMessageLocale("student.result", new String[]{student.getName(), String.valueOf(score)});
-        inputOutputService.println(result);
+    void showResults() {
+        printMessageService.printMessage("student.result", student.getName(), String.valueOf(score));
     }
 
-    private String getMessageLocale(String param, String[] args) {
-        return messageSource.getMessage(param, args, ymlProperties.getLocale());
-    }
 }
