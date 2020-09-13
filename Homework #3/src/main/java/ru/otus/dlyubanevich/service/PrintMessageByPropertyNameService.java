@@ -11,9 +11,9 @@ public class PrintMessageByPropertyNameService implements PrintMessageService {
     private final MessageService messageService;
 
     @Override
-    public void printMessage(String messageName, String... args) {
+    public void printMessage(String propertyName, String... args) {
         inputOutputService.print(
-                messageService.getMessage(messageName, args)
+                messageService.getMessage(propertyName, args)
         );
     }
 }
