@@ -1,5 +1,4 @@
 
-
 application:
   testingForm: testing_form_ru.csv
   locale: ru_RU
@@ -10,6 +9,6 @@ logging:
 
 spring:
   messages:
-    basename: classpath:/i18n/messages
+    basename: messages
     encoding: windows-1251
 
