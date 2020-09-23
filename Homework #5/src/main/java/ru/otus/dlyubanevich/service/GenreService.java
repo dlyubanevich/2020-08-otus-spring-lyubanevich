@@ -2,8 +2,11 @@ package ru.otus.dlyubanevich.service;
 
 import ru.otus.dlyubanevich.domain.Genre;
 
+import java.util.List;
+
 public interface GenreService {
 
-    Genre getGenreByName(String name);
+    List<Genre> getGenresByName(String name);
+    Genre saveGenre(Genre genre);
 
 }

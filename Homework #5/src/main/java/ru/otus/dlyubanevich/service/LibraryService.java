@@ -10,6 +10,7 @@ public interface LibraryService {
     List<Book> getAllBooks();
     void updateBook(long id, String name, String authorFirstName, String authorLastName, String genreName);
     void deleteBook(long id);
-    List<Book> findBookByName(String name);
-
+    List<Book> findBooksByName(String name);
+    List<Book> findBooksByAuthor(String authorFirstName, String authorLastName);
+    List<Book> findBooksByGenre(String genreName);
 }

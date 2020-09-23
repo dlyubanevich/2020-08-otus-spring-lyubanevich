@@ -14,17 +14,17 @@ public class BookMapper implements RowMapper<Book> {
     public Book mapRow(ResultSet resultSet, int i) throws SQLException {
         long id = resultSet.getLong("id");
         var name = resultSet.getString("name");
-        long author_id = resultSet.getLong("author_id");
-        var author_first_name = resultSet.getString("author_first_name");
-        var author_last_name = resultSet.getString("author_last_name");
-        long genre_id = resultSet.getLong("genre_id");
-        var genre_name = resultSet.getString("genre_name");
+        long authorId = resultSet.getLong("author_id");
+        var authorFirstName = resultSet.getString("author_first_name");
+        var authorLastName = resultSet.getString("author_last_name");
+        long genreId = resultSet.getLong("genre_id");
+        var genreName = resultSet.getString("genre_name");
 
-        var author = new Author(author_first_name, author_last_name);
-        author.setId(author_id);
+        var author = new Author(authorFirstName, authorLastName);
+        author.setId(authorId);
 
-        var genre = new Genre(genre_name);
-        genre.setId(genre_id);
+        var genre = new Genre(genreName);
+        genre.setId(genreId);
 
         var book = new Book(name, author, genre);
         book.setId(id);

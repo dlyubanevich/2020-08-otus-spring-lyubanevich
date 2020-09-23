@@ -10,7 +10,9 @@ public interface BookDao {
     void delete(Book book);
     void update(Book book);
     List<Book> getAll();
-    List<Book> findById(long id);
-    List<Book> find(Book book);
+    Book findById(long id);
+    List<Book> findBooksByOneOfAttributes(Book book);
+    boolean isExist(Book book);
+    boolean isExist(long id);
 
 }

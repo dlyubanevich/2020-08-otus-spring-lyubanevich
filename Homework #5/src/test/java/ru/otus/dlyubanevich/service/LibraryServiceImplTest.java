@@ -43,13 +43,18 @@ class LibraryServiceImplTest {
     @DisplayName("получать из базы автора, жанр и создавать книгу")
     void shouldSaveTheBook() {
 
-        given(authorService.getAuthorByName(FIRST_NAME, LAST_NAME)).willReturn(author);
-        given(genreService.getGenreByName(GENRE)).willReturn(genre);
+        List<Genre> genres = new ArrayList<>();
+        genres.add(genre);
+        List<Author> authors = new ArrayList<>();
+        authors.add(author);
+
+        given(authorService.getAuthorsByName(FIRST_NAME, LAST_NAME)).willReturn(authors);
+        given(genreService.getGenresByName(GENRE)).willReturn(genres);
 
         libraryService.addBook(BOOK_NAME, FIRST_NAME, LAST_NAME, GENRE);
 
-        verify(authorService, times(1)).getAuthorByName(FIRST_NAME, LAST_NAME);
-        verify(genreService, times(1)).getGenreByName(GENRE);
+        verify(authorService, times(1)).getAuthorsByName(FIRST_NAME, LAST_NAME);
+        verify(genreService, times(1)).getGenresByName(GENRE);
         verify(bookService, times(1)).addBook(BOOK_NAME, author, genre);
 
     }
@@ -71,13 +76,18 @@ class LibraryServiceImplTest {
     @DisplayName("обновлять книгу по id, автору и жанру")
     void shouldUpdateTheBook() {
 
-        given(authorService.getAuthorByName(FIRST_NAME, LAST_NAME)).willReturn(author);
-        given(genreService.getGenreByName(GENRE)).willReturn(genre);
+        List<Genre> genres = new ArrayList<>();
+        genres.add(genre);
+        List<Author> authors = new ArrayList<>();
+        authors.add(author);
+
+        given(authorService.getAuthorsByName(FIRST_NAME, LAST_NAME)).willReturn(authors);
+        given(genreService.getGenresByName(GENRE)).willReturn(genres);
 
         libraryService.updateBook(ID, BOOK_NAME, FIRST_NAME, LAST_NAME, GENRE);
 
-        verify(authorService, times(1)).getAuthorByName(FIRST_NAME, LAST_NAME);
-        verify(genreService, times(1)).getGenreByName(GENRE);
+        verify(authorService, times(1)).getAuthorsByName(FIRST_NAME, LAST_NAME);
+        verify(genreService, times(1)).getGenresByName(GENRE);
         verify(bookService, times(1)).updateBook(ID, BOOK_NAME, author, genre);
     }
 
@@ -100,11 +110,11 @@ class LibraryServiceImplTest {
         List<Book> books = new ArrayList<>();
         books.add(new Book(BOOK_NAME, author, genre));
 
-        given(bookService.findBooks(BOOK_NAME, emptyAuthor, emptyGenre)).willReturn(books);
+        given(bookService.findBooksByOneOfAttributes(BOOK_NAME, emptyAuthor, emptyGenre)).willReturn(books);
 
-        libraryService.findBookByName(BOOK_NAME);
+        libraryService.findBooksByName(BOOK_NAME);
 
-        verify(bookService, times(1)).findBooks(BOOK_NAME, emptyAuthor, emptyGenre);
+        verify(bookService, times(1)).findBooksByOneOfAttributes(BOOK_NAME, emptyAuthor, emptyGenre);
 
     }
 }

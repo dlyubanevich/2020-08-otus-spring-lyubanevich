@@ -14,20 +14,12 @@ public class GenreServiceImpl implements GenreService {
     private final GenreDao genreDao;
 
     @Override
-    public Genre getGenreByName(String name) {
-        Genre genre;
-        List<Genre> genres = genreDao.getByName(name);
-        if (genres.size() != 0){
-            genre = genres.get(0);
-        }else{
-            genre = saveGenre(name);
-        }
-        return genre;
+    public List<Genre> getGenresByName(String name) {
+        return genreDao.getByName(name);
     }
 
-    private Genre saveGenre(String name) {
-        Genre genre = new Genre(name);
+    @Override
+    public Genre saveGenre(Genre genre) {
         return genreDao.save(genre);
     }
-
 }

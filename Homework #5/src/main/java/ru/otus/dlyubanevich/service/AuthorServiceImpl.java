@@ -14,19 +14,12 @@ public class AuthorServiceImpl implements AuthorService {
     private final AuthorDao authorDao;
 
     @Override
-    public Author getAuthorByName(String firstName, String lastName) {
-        List<Author> authors = authorDao.getByName(firstName, lastName);
-        Author author;
-        if (authors.size() > 0){
-            author = authors.get(0);
-        }else{
-            author = saveAuthor(firstName, lastName);
-        }
-        return author;
+    public List<Author> getAuthorsByName(String firstName, String lastName) {
+        return authorDao.getByName(firstName, lastName);
     }
 
-    private Author saveAuthor(String firstName, String lastName) {
-        Author author = new Author(firstName, lastName);
+    @Override
+    public Author saveAuthor(Author author) {
         return authorDao.save(author);
     }
 

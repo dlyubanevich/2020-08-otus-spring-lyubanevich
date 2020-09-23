@@ -1,6 +1,7 @@
 package ru.otus.dlyubanevich.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import ru.otus.dlyubanevich.dao.BookDao;
 import ru.otus.dlyubanevich.domain.Author;
@@ -20,16 +21,15 @@ public class BookServiceImpl implements BookService {
     @Override
     public void addBook(String name, Author author, Genre genre){
         var book = new Book(name, author, genre);
-        if (bookIsAbsentInLibrary(book)){
-            saveBook(book);
-        }else{
+        if (bookIsExist(book)){
             throw new BookAlreadyExistException("Book with specified parameters is already exist!");
+        }else{
+            saveBook(book);
         }
     }
 
-    private boolean bookIsAbsentInLibrary(Book book) {
-        var books = bookDao.find(book);
-        return books.size() == 0;
+    private boolean bookIsExist(Book book) {
+        return bookDao.isExist(book);
     }
 
     private void saveBook(Book book) {
@@ -43,8 +43,8 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void deleteBook(long id) {
-        var books = findBookByIdOrThrowException(id);
-        books.forEach(bookDao::delete);
+        var book = findBookByIdOrThrowException(id);
+        bookDao.delete(book);
     }
 
     @Override
@@ -58,22 +58,24 @@ public class BookServiceImpl implements BookService {
         }
     }
 
-    private boolean bookIsExist(long id) {
-        var books = bookDao.findById(id);
-        return books.size() > 0;
+    @Override
+    public List<Book> findBooksByOneOfAttributes(String name, Author author, Genre genre) {
+        var book = new Book(name, author, genre);
+        return bookDao.findBooksByOneOfAttributes(book);
     }
 
-    private List<Book> findBookByIdOrThrowException(long id) {
-        var books = bookDao.findById(id);
-        if (books.size() == 0){
+    private boolean bookIsExist(long id) {
+        return bookDao.isExist(id);
+    }
+
+    private Book findBookByIdOrThrowException(long id) {
+        Book book;
+        try{
+            book = bookDao.findById(id);
+        }catch (EmptyResultDataAccessException exception){
             throw new BookNotFoundException("There is no book by id " + id);
         }
-        return books;
+        return book;
     }
 
-    @Override
-    public List<Book> findBooks(String name, Author author, Genre genre) {
-        var book = new Book(name, author, genre);
-        return bookDao.find(book);
-    }
 }

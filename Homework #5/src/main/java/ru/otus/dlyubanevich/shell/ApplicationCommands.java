@@ -35,13 +35,31 @@ public class ApplicationCommands {
         libraryService.updateBook(id, name, authorFirstName, authorLastName, genre);
     }
 
-    @ShellMethod(value = "Find by name", key = {"find"})
-    public void findBooks(@ShellOption String name){
-        var books = libraryService.findBookByName(name);
+    @ShellMethod(value = "Find books by name", key = {"fbb"})
+    public void findBooksByName(@ShellOption String name){
+        var books = libraryService.findBooksByName(name);
         if (books.size() != 0) {
             books.forEach(System.out::println);
         }else {
             System.out.println("There is no book with name " + name);
+        }
+    }
+    @ShellMethod(value = "Find books by author", key = {"fba"})
+    public void findBooksByAuthor(@ShellOption String authorFirstName, @ShellOption String authorLastName){
+        var books = libraryService.findBooksByAuthor(authorFirstName, authorLastName);
+        if (books.size() != 0) {
+            books.forEach(System.out::println);
+        }else {
+            System.out.println("There is no book by author " + authorFirstName + " " + authorLastName);
+        }
+    }
+    @ShellMethod(value = "Find books by genre", key = {"fbg"})
+    public void findBooksByGenre(@ShellOption String genreName){
+        var books = libraryService.findBooksByGenre(genreName);
+        if (books.size() != 0) {
+            books.forEach(System.out::println);
+        }else {
+            System.out.println("There is no book with genre " + genreName);
         }
     }
 

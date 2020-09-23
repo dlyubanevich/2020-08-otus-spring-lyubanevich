@@ -17,12 +17,15 @@ class AuthorDaoJdbcTest {
     @Autowired
     private AuthorDaoJdbc authorDaoJdbc;
 
+    private final static int COUNT_OF_AUTHORS = 3;
+    private final static int EXPECTED_COUNT_OF_AUTHORS = 1;
+
     @DisplayName("возвращать список из 3-х авторов")
     @Test
     void shouldGetListOfAuthors() {
         var authors = authorDaoJdbc.getAll();
         assertThat(authors)
-                .hasSize(3);
+                .hasSize(COUNT_OF_AUTHORS);
     }
 
     @Test
@@ -33,7 +36,7 @@ class AuthorDaoJdbcTest {
         var foundedAuthors = authorDaoJdbc.getByName(firstname, lastName);
         assertThat(foundedAuthors)
                 .filteredOn(author -> author.getFirstName().equals(firstname) && author.getLastName().equals(lastName))
-                .hasSize(1);
+                .hasSize(EXPECTED_COUNT_OF_AUTHORS);
     }
 
     @Test
@@ -47,7 +50,7 @@ class AuthorDaoJdbcTest {
         assertThat(authorsAfterSave)
                 .hasSizeGreaterThan(authorsBeforeSave.size())
                 .filteredOn(author -> author.getId() > 0)
-                .hasSize(1)
+                .hasSize(EXPECTED_COUNT_OF_AUTHORS)
                 .contains(newAuthor);
     }
 }

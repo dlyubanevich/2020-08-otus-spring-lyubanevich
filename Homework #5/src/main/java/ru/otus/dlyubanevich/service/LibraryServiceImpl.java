@@ -18,9 +18,31 @@ public class LibraryServiceImpl implements LibraryService {
 
     @Override
     public void addBook(String name, String authorFirstName, String authorLastName, String genreName) {
-        Author author = authorService.getAuthorByName(authorFirstName, authorLastName);
-        Genre genre = genreService.getGenreByName(genreName);
+        var author = getAuthorByNameOrSaveIfNotExist(authorFirstName, authorLastName);
+        var genre = getGenreByNameOrSaveIfNotExist(genreName);
         bookService.addBook(name, author, genre);
+    }
+
+    private Genre getGenreByNameOrSaveIfNotExist(String genreName) {
+        Genre genre;
+        var genres = genreService.getGenresByName(genreName);
+        if (genres.size() == 0){
+            genre = genreService.saveGenre(new Genre(genreName));
+        }else {
+            genre = genres.get(0);
+        }
+        return genre;
+    }
+
+    private Author getAuthorByNameOrSaveIfNotExist(String authorFirstName, String authorLastName) {
+        Author author;
+        var authors = authorService.getAuthorsByName(authorFirstName, authorLastName);
+        if (authors.size() == 0){
+            author = authorService.saveAuthor(new Author(authorFirstName, authorLastName));
+        }else {
+            author = authors.get(0);
+        }
+        return author;
     }
 
     @Override
@@ -30,8 +52,8 @@ public class LibraryServiceImpl implements LibraryService {
 
     @Override
     public void updateBook(long id, String name, String authorFirstName, String authorLastName, String genreName) {
-        Author author = authorService.getAuthorByName(authorFirstName, authorLastName);
-        Genre genre = genreService.getGenreByName(genreName);
+        var author = getAuthorByNameOrSaveIfNotExist(authorFirstName, authorLastName);
+        var genre = getGenreByNameOrSaveIfNotExist(genreName);
         bookService.updateBook(id, name, author, genre);
     }
 
@@ -41,9 +63,25 @@ public class LibraryServiceImpl implements LibraryService {
     }
 
     @Override
-    public List<Book> findBookByName(String name) {
+    public List<Book> findBooksByName(String name) {
         var author = new Author("", "");
         var genre = new Genre("");
-        return bookService.findBooks(name, author, genre);
+        return bookService.findBooksByOneOfAttributes(name, author, genre);
+    }
+
+    @Override
+    public List<Book> findBooksByAuthor(String authorFirstName, String authorLastName) {
+        var name ="";
+        var author = new Author(authorFirstName, authorLastName);
+        var genre = new Genre("");
+        return bookService.findBooksByOneOfAttributes(name, author, genre);
+    }
+
+    @Override
+    public List<Book> findBooksByGenre(String genreName) {
+        var name = "";
+        var author = new Author("", "");
+        var genre = new Genre(genreName);
+        return bookService.findBooksByOneOfAttributes(name, author, genre);
     }
 }

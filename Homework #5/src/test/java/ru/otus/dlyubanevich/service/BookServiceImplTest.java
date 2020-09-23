@@ -5,15 +5,13 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.dao.EmptyResultDataAccessException;
 import ru.otus.dlyubanevich.dao.BookDao;
 import ru.otus.dlyubanevich.domain.Author;
 import ru.otus.dlyubanevich.domain.Book;
 import ru.otus.dlyubanevich.domain.Genre;
 import ru.otus.dlyubanevich.service.exeption.BookAlreadyExistException;
 import ru.otus.dlyubanevich.service.exeption.BookNotFoundException;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.catchThrowable;
@@ -23,7 +21,6 @@ import static org.mockito.Mockito.verify;
 
 @DisplayName("Класс BookServiceImpl должен")
 @SpringBootTest
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class BookServiceImplTest {
 
     @MockBean
@@ -42,7 +39,7 @@ class BookServiceImplTest {
     private final Genre genre = new Genre(GENRE);
     private final Book book = new Book(BOOK_NAME, author, genre);
 
-    @BeforeAll
+    @BeforeEach
     public void setUp(){
         Mockito.reset(bookDao);
     }
@@ -51,12 +48,11 @@ class BookServiceImplTest {
     @DisplayName("добавлять книгу, если она отсутствует в библиотеке")
     void shouldAddTheBookIfAbsent() {
 
-        List<Book> emptyList = new ArrayList<>();
-        given(bookDao.find(book)).willReturn(emptyList);
+        given(bookDao.isExist(book)).willReturn(false);
 
         bookService.addBook(BOOK_NAME, author, genre);
 
-        verify(bookDao, times(1)).find(book);
+        verify(bookDao, times(1)).isExist(book);
         verify(bookDao, times(1)).save(book);
 
     }
@@ -65,9 +61,7 @@ class BookServiceImplTest {
     @DisplayName("бросать исключение, если книга присутствует в библиотеке")
     void shouldThrowExceptionIfBookIsAbsent() {
 
-        List<Book> books = new ArrayList<>();
-        books.add(book);
-        given(bookDao.find(book)).willReturn(books);
+        given(bookDao.isExist(book)).willReturn(true);
 
         Throwable throwable = catchThrowable(() -> bookService.addBook(BOOK_NAME, author, genre));
         assertThat(throwable).isInstanceOf(BookAlreadyExistException.class);
@@ -78,9 +72,7 @@ class BookServiceImplTest {
     @DisplayName("удалять книгу по id")
     void shouldDeleteBookById() {
 
-        List<Book> books = new ArrayList<>();
-        books.add(book);
-        given(bookDao.findById(ID)).willReturn(books);
+        given(bookDao.findById(ID)).willReturn(book);
 
         bookService.deleteBook(ID);
 
@@ -92,9 +84,7 @@ class BookServiceImplTest {
     @DisplayName("обновлять книгу, если она есть в библиотеке")
     void shouldUpdateBookIfAbsent() {
 
-        List<Book> books = new ArrayList<>();
-        books.add(book);
-        given(bookDao.findById(ID)).willReturn(books);
+        given(bookDao.isExist(ID)).willReturn(true);
 
         bookService.updateBook(ID, BOOK_NAME, author, genre);
 
@@ -106,8 +96,7 @@ class BookServiceImplTest {
     @DisplayName("бросать исключение при обновлении книги, которой нет в библиотеке")
     void shouldThrowExceptionWhenTryingUpdateAbsentBook() {
 
-        List<Book> emptyList = new ArrayList<>();
-        given(bookDao.findById(ID)).willReturn(emptyList);
+        given(bookDao.findById(ID)).willThrow(EmptyResultDataAccessException.class);
 
         Throwable throwable = catchThrowable(() -> bookService.updateBook(ID, BOOK_NAME, author, genre));
         assertThat(throwable).isInstanceOf(BookNotFoundException.class);

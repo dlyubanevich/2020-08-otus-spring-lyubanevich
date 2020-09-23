@@ -19,14 +19,20 @@ class BookDaoJdbcTest {
     @Autowired
     private BookDaoJdbc bookDaoJdbc;
 
+    private final static int COUNT_OF_BOOKS = 6;
+    private final static int EXPECTED_COUNT_OF_BOOKS = 1;
+    private final static long AUTHOR_ID = 1;
+    private final static long GENRE_ID = 3;
+    private final static long BOOK_ID = 1;
+
     @DisplayName("добавлять новую книгу")
     @Test
     void shouldInsertNewBook() {
         var booksBeforeSave = bookDaoJdbc.getAll();
         var author = new Author("Robert", "Martin");
-        author.setId(1);
+        author.setId(AUTHOR_ID);
         var genre = new Genre("Computer science");
-        genre.setId(3);
+        genre.setId(GENRE_ID);
         var book = new Book("Book", author, genre);
         book = bookDaoJdbc.save(book);
         var booksAfterSave = bookDaoJdbc.getAll();
@@ -51,11 +57,11 @@ class BookDaoJdbcTest {
     @Test
     void shouldUpdateTheBook() {
         var author = new Author("Robert", "Martin");
-        author.setId(1);
+        author.setId(AUTHOR_ID);
         var genre = new Genre("Computer science");
-        genre.setId(3);
+        genre.setId(GENRE_ID);
         var book = new Book("new Book", author, genre);
-        book.setId(1);
+        book.setId(BOOK_ID);
         bookDaoJdbc.update(book);
         var booksAfterUpdate = bookDaoJdbc.getAll();
         assertThat(booksAfterUpdate).contains(book);
@@ -66,7 +72,7 @@ class BookDaoJdbcTest {
     void shouldGetListOfBooks() {
         var books = bookDaoJdbc.getAll();
         assertThat(books)
-                .hasSize(6);
+                .hasSize(COUNT_OF_BOOKS);
     }
 
     @Test
@@ -74,10 +80,9 @@ class BookDaoJdbcTest {
     void shouldFindBookById() {
         var books = bookDaoJdbc.getAll();
         var book = books.get(0);
-        var foundedBooks = bookDaoJdbc.findById(book.getId());
-        assertThat(foundedBooks)
-                .hasSize(1)
-                .contains(book);
+        var foundedBook = bookDaoJdbc.findById(book.getId());
+        assertThat(foundedBook)
+                .isEqualTo(book);
     }
 
     @Test
@@ -89,10 +94,10 @@ class BookDaoJdbcTest {
         var genre = new Genre("");
         var book = new Book(name, author, genre);
 
-        var foundedBooks = bookDaoJdbc.find(book);
+        var foundedBooks = bookDaoJdbc.findBooksByOneOfAttributes(book);
 
         assertThat(foundedBooks)
-                .hasSize(1)
+                .hasSize(EXPECTED_COUNT_OF_BOOKS)
                 .extracting(Book::getName)
                 .contains(name);
     }
@@ -107,10 +112,10 @@ class BookDaoJdbcTest {
         var genre = new Genre("");
         var book = new Book(name, author, genre);
 
-        var foundedBooks = bookDaoJdbc.find(book);
+        var foundedBooks = bookDaoJdbc.findBooksByOneOfAttributes(book);
 
         assertThat(foundedBooks)
-                .hasSize(1)
+                .hasSize(EXPECTED_COUNT_OF_BOOKS)
                 .extracting(Book::getName)
                 .contains("War and peace");
     }
@@ -125,10 +130,10 @@ class BookDaoJdbcTest {
         genre.setId(1);
         var book = new Book(name, author, genre);
 
-        var foundedBooks = bookDaoJdbc.find(book);
+        var foundedBooks = bookDaoJdbc.findBooksByOneOfAttributes(book);
 
         assertThat(foundedBooks)
-                .hasSize(1)
+                .hasSize(EXPECTED_COUNT_OF_BOOKS)
                 .extracting(Book::getName)
                 .contains("War and peace");
     }

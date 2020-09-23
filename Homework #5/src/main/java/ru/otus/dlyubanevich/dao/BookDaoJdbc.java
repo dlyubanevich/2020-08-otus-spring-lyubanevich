@@ -53,36 +53,58 @@ public class BookDaoJdbc implements BookDao {
         var query = "select books.id, books.name, books.author_id, books.genre_id, authors.first_name as author_first_name, " +
                 "authors.last_name as author_last_name, genres.name as genre_name " +
                 "from books as books " +
-                    "join authors as authors on books.author_id = authors.id " +
-                    "join genres as genres on books.genre_id = genres.id";
+                    "left join authors as authors on books.author_id = authors.id " +
+                    "left join genres as genres on books.genre_id = genres.id";
         return jdbc.query(query, BOOK_MAPPER);
     }
 
     @Override
-    public List<Book> findById(long id) {
+    public Book findById(long id) {
         var query = "select books.id, books.name, books.author_id, books.genre_id, authors.first_name as author_first_name, " +
                 "authors.last_name as author_last_name, genres.name as genre_name " +
                 "from books as books " +
-                    "join authors as authors on books.author_id = authors.id " +
-                    "join genres as genres on books.genre_id = genres.id " +
+                    "left join authors as authors on books.author_id = authors.id " +
+                    "left join genres as genres on books.genre_id = genres.id " +
                 "where books.id = :id";
         var parameters = new MapSqlParameterSource();
         parameters.addValue("id", id);
-        return jdbc.query(query, parameters, BOOK_MAPPER);
+        return jdbc.queryForObject(query, parameters, BOOK_MAPPER);
     }
 
     @Override
-    public List<Book> find(Book book) {
+    public List<Book> findBooksByOneOfAttributes(Book book) {
         var query = "select books.id, books.name, books.author_id, books.genre_id, authors.first_name as author_first_name, " +
                 "authors.last_name as author_last_name, genres.name as genre_name " +
                 "from books as books " +
-                "join authors as authors on books.author_id = authors.id " +
-                "join genres as genres on books.genre_id = genres.id " +
-                "where (books.name = :name or books.author_id = :author_id or books.genre_id = :genre_id)";
+                "left join authors as authors on books.author_id = authors.id " +
+                "left join genres as genres on books.genre_id = genres.id " +
+                "where (books.name = :name or (authors.first_name = :first_name and authors.last_name = :last_name) or genres.name = :genre_name)";
         return jdbc.query(
                 query,
-                getBookSqlParameters(book),
+                getBookSqlAttributes(book),
                 BOOK_MAPPER);
+    }
+
+    @Override
+    public boolean isExist(Book book) {
+        var query = "select count(*) from books where (name = :name and author_id = :author_id and genre_id = :genre_id)";
+        var count = jdbc.queryForObject(
+                query,
+                getBookSqlParameters(book),
+                Integer.class);
+        return count != 0;
+    }
+
+    @Override
+    public boolean isExist(long id) {
+        var query = "select count(*) from books where id = :id";
+        var parameters = new MapSqlParameterSource();
+        parameters.addValue("id", id);
+        var count = jdbc.queryForObject(
+                query,
+                parameters,
+                Integer.class);
+        return count != 0;
     }
 
     private MapSqlParameterSource getBookSqlParameters(Book book) {
@@ -94,4 +116,12 @@ public class BookDaoJdbc implements BookDao {
         return parameters;
     }
 
+    private MapSqlParameterSource getBookSqlAttributes(Book book) {
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        parameters.addValue("name", book.getName());
+        parameters.addValue("first_name", book.getAuthor().getFirstName());
+        parameters.addValue("last_name", book.getAuthor().getLastName());
+        parameters.addValue("genre_name", book.getGenre().getName());
+        return parameters;
+    }
 }
