@@ -62,26 +62,4 @@ public class LibraryServiceImpl implements LibraryService {
         bookService.deleteBook(id);
     }
 
-    @Override
-    public List<Book> findBooksByName(String name) {
-        var author = new Author("", "");
-        var genre = new Genre("");
-        return bookService.findBooksByOneOfAttributes(name, author, genre);
-    }
-
-    @Override
-    public List<Book> findBooksByAuthor(String authorFirstName, String authorLastName) {
-        var name ="";
-        var author = new Author(authorFirstName, authorLastName);
-        var genre = new Genre("");
-        return bookService.findBooksByOneOfAttributes(name, author, genre);
-    }
-
-    @Override
-    public List<Book> findBooksByGenre(String genreName) {
-        var name = "";
-        var author = new Author("", "");
-        var genre = new Genre(genreName);
-        return bookService.findBooksByOneOfAttributes(name, author, genre);
-    }
 }

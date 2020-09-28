@@ -31,9 +31,9 @@ public class BookDaoJdbc implements BookDao {
     }
 
     @Override
-    public void delete(Book book) {
+    public void delete(long id) {
         var parameters = new MapSqlParameterSource();
-        parameters.addValue("id", book.getId());
+        parameters.addValue("id", id);
         jdbc.update(
                 "delete from books where id = :id",
                 parameters
@@ -72,20 +72,6 @@ public class BookDaoJdbc implements BookDao {
     }
 
     @Override
-    public List<Book> findBooksByOneOfAttributes(Book book) {
-        var query = "select books.id, books.name, books.author_id, books.genre_id, authors.first_name as author_first_name, " +
-                "authors.last_name as author_last_name, genres.name as genre_name " +
-                "from books as books " +
-                "left join authors as authors on books.author_id = authors.id " +
-                "left join genres as genres on books.genre_id = genres.id " +
-                "where (books.name = :name or (authors.first_name = :first_name and authors.last_name = :last_name) or genres.name = :genre_name)";
-        return jdbc.query(
-                query,
-                getBookSqlAttributes(book),
-                BOOK_MAPPER);
-    }
-
-    @Override
     public boolean isExist(Book book) {
         var query = "select count(*) from books where (name = :name and author_id = :author_id and genre_id = :genre_id)";
         var count = jdbc.queryForObject(
@@ -116,12 +102,4 @@ public class BookDaoJdbc implements BookDao {
         return parameters;
     }
 
-    private MapSqlParameterSource getBookSqlAttributes(Book book) {
-        MapSqlParameterSource parameters = new MapSqlParameterSource();
-        parameters.addValue("name", book.getName());
-        parameters.addValue("first_name", book.getAuthor().getFirstName());
-        parameters.addValue("last_name", book.getAuthor().getLastName());
-        parameters.addValue("genre_name", book.getGenre().getName());
-        return parameters;
-    }
 }

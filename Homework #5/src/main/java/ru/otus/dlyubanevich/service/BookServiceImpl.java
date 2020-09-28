@@ -1,7 +1,6 @@
 package ru.otus.dlyubanevich.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import ru.otus.dlyubanevich.dao.BookDao;
 import ru.otus.dlyubanevich.domain.Author;
@@ -28,10 +27,6 @@ public class BookServiceImpl implements BookService {
         }
     }
 
-    private boolean bookIsExist(Book book) {
-        return bookDao.isExist(book);
-    }
-
     private void saveBook(Book book) {
         bookDao.save(book);
     }
@@ -43,8 +38,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void deleteBook(long id) {
-        var book = findBookByIdOrThrowException(id);
-        bookDao.delete(book);
+        bookDao.delete(id);
     }
 
     @Override
@@ -58,24 +52,12 @@ public class BookServiceImpl implements BookService {
         }
     }
 
-    @Override
-    public List<Book> findBooksByOneOfAttributes(String name, Author author, Genre genre) {
-        var book = new Book(name, author, genre);
-        return bookDao.findBooksByOneOfAttributes(book);
-    }
-
     private boolean bookIsExist(long id) {
         return bookDao.isExist(id);
     }
 
-    private Book findBookByIdOrThrowException(long id) {
-        Book book;
-        try{
-            book = bookDao.findById(id);
-        }catch (EmptyResultDataAccessException exception){
-            throw new BookNotFoundException("There is no book by id " + id);
-        }
-        return book;
+    private boolean bookIsExist(Book book) {
+        return bookDao.isExist(book);
     }
 
 }

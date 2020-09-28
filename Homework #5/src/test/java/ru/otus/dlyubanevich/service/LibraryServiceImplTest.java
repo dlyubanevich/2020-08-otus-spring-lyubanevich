@@ -1,10 +1,13 @@
 package ru.otus.dlyubanevich.service;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.annotation.DirtiesContext;
 import ru.otus.dlyubanevich.domain.Author;
 import ru.otus.dlyubanevich.domain.Book;
 import ru.otus.dlyubanevich.domain.Genre;
@@ -18,6 +21,7 @@ import static org.mockito.Mockito.verify;
 
 @DisplayName("Класс LibraryServiceImpl должен")
 @SpringBootTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class LibraryServiceImplTest {
 
     @MockBean
@@ -38,6 +42,11 @@ class LibraryServiceImplTest {
 
     private final Author author = new Author(FIRST_NAME, LAST_NAME);
     private final Genre genre = new Genre(GENRE);
+
+    @BeforeEach
+    public void setUp(){
+        Mockito.reset(authorService, genreService, bookService);
+    }
 
     @Test
     @DisplayName("получать из базы автора, жанр и создавать книгу")
@@ -100,21 +109,4 @@ class LibraryServiceImplTest {
 
     }
 
-    @Test
-    @DisplayName("находить книгу по имени")
-    void shouldFindBookByName() {
-
-        var emptyAuthor = new Author("", "");
-        var emptyGenre = new Genre("");
-
-        List<Book> books = new ArrayList<>();
-        books.add(new Book(BOOK_NAME, author, genre));
-
-        given(bookService.findBooksByOneOfAttributes(BOOK_NAME, emptyAuthor, emptyGenre)).willReturn(books);
-
-        libraryService.findBooksByName(BOOK_NAME);
-
-        verify(bookService, times(1)).findBooksByOneOfAttributes(BOOK_NAME, emptyAuthor, emptyGenre);
-
-    }
 }

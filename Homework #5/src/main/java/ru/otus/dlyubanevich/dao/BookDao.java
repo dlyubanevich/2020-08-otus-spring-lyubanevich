@@ -7,11 +7,10 @@ import java.util.List;
 public interface BookDao {
 
     Book save(Book book);
-    void delete(Book book);
+    void delete(long id);
     void update(Book book);
     List<Book> getAll();
     Book findById(long id);
-    List<Book> findBooksByOneOfAttributes(Book book);
     boolean isExist(Book book);
     boolean isExist(long id);
 
