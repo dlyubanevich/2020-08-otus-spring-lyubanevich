@@ -9,7 +9,7 @@ import ru.otus.dlyubanevich.service.exeption.CommentNotFoundException;
 
 @Service
 @RequiredArgsConstructor
-public class CommentServiceOrm implements CommentService {
+public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
 

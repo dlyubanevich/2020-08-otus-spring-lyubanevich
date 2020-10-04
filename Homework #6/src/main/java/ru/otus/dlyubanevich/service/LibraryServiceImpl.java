@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class LibraryServiceOrm implements LibraryService {
+public class LibraryServiceImpl implements LibraryService {
 
     private final AuthorService authorService;
     private final GenreService genreService;

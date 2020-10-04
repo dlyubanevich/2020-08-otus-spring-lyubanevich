@@ -47,7 +47,7 @@ class BookRepositoryJpaTest {
 
         assertThat(books)
                 .hasSize(EXPECTED_COUNT_OF_ALL_BOOKS)
-                .allMatch(b-> b.getGenres().size() == 1 && b.getAuthors().size() == 1 && b.getComments().size() >=0);
+                .allMatch(b-> b.getGenres().size() == 1 && b.getAuthors().size() == 1);
         assertThat(sessionFactory.getStatistics().getPrepareStatementCount()).isEqualTo(EXPECTED_QUERIES_COUNT);
 
     }

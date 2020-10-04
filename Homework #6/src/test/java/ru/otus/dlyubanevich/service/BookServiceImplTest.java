@@ -27,7 +27,7 @@ import static org.mockito.Mockito.verify;
 @DisplayName("Класс BookServiceOrm должен")
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-class BookServiceOrmTest {
+class BookServiceImplTest {
 
     private static final String NAME_OF_NEW_BOOK = "new Book";
     private static final long EMPTY_ID = 0;

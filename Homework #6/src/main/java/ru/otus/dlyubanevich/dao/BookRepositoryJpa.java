@@ -37,7 +37,7 @@ public class BookRepositoryJpa implements BookRepository {
 
     @Override
     public List<Book> getAll() {
-        TypedQuery<Book> query = entityManager.createQuery("select b from Book b left join fetch b.authors", Book.class);
+        TypedQuery<Book> query = entityManager.createQuery("select b from Book b", Book.class);
         return query.getResultList();
     }
 
@@ -51,7 +51,7 @@ public class BookRepositoryJpa implements BookRepository {
     @Override
     public boolean isExist(Book book) {
         TypedQuery<Book> query = entityManager.createQuery(
-                "select b from Book b left join fetch b.genres where b.name = :name",
+                "select b from Book b where b.name = :name",
                 Book.class
         );
         query.setParameter("name", book.getName());
@@ -72,7 +72,7 @@ public class BookRepositoryJpa implements BookRepository {
     @Override
     public List<Book> findByName(String name) {
         TypedQuery<Book> query = entityManager.createQuery(
-                "select b from Book b left join fetch b.genres where b.name = :name",
+                "select b from Book b where b.name = :name",
                 Book.class
         );
         query.setParameter("name", name);

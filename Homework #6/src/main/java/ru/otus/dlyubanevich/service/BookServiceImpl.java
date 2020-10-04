@@ -15,7 +15,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class BookServiceOrm implements BookService {
+public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
 

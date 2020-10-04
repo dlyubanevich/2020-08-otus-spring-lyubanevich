@@ -29,7 +29,7 @@ import static org.mockito.Mockito.verify;
 @DisplayName("Класс LibraryServiceImpl должен")
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-class LibraryServiceOrmTest {
+class LibraryServiceImplTest {
 
     @MockBean
     private AuthorService authorService;
