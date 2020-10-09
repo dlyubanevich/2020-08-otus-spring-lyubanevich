@@ -23,18 +23,15 @@ public class LibraryServiceImpl implements LibraryService {
     private final BookService bookService;
     private final CommentService commentService;
 
-    private static final long EMPTY_ID = 0;
-
     @Transactional
     @Override
     public void addBook(String name, String authorFirstName, String authorLastName, String genreName) {
         var author = getAuthorByNameOrSaveIfNotExist(authorFirstName, authorLastName);
         var genre = getGenreByNameOrSaveIfNotExist(genreName);
         var book = new Book(
-                EMPTY_ID,
                 name,
-                Collections.singletonList(author),
-                Collections.singletonList(genre));
+                Collections.singleton(author),
+                Collections.singleton(genre));
         bookService.save(book);
     }
 
@@ -100,7 +97,7 @@ public class LibraryServiceImpl implements LibraryService {
         Genre genre;
         var listOfGenres = genreService.findByName(genreName);
         if (listOfGenres.size() == 0){
-            genre = genreService.save(new Genre(EMPTY_ID, genreName));
+            genre = genreService.save(new Genre(genreName));
         }else {
             genre = listOfGenres.get(0);
         }
@@ -111,7 +108,7 @@ public class LibraryServiceImpl implements LibraryService {
         Author author;
         var listOfAuthors = authorService.findByName(authorFirstName, authorLastName);
         if (listOfAuthors.size() == 0){
-            author = authorService.save(new Author(EMPTY_ID, authorFirstName, authorLastName));
+            author = authorService.save(new Author(authorFirstName, authorLastName));
         }else {
             author = listOfAuthors.get(0);
         }

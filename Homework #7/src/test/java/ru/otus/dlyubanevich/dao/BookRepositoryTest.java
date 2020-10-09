@@ -13,7 +13,7 @@ import ru.otus.dlyubanevich.domain.Book;
 import ru.otus.dlyubanevich.domain.Genre;
 
 import java.util.Collections;
-import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -59,7 +59,7 @@ class BookRepositoryTest {
 
         var author = entityManager.find(Author.class, FIRST_AUTHOR_ID);
         var genre = entityManager.find(Genre.class, THIRD_GENRE_ID);
-        var book = new Book(0, NEW_BOOK_NAME, Collections.singletonList(author), Collections.singletonList(genre));
+        var book = new Book(NEW_BOOK_NAME, Collections.singleton(author), Collections.singleton(genre));
 
         book = repository.save(book);
 
@@ -88,19 +88,20 @@ class BookRepositoryTest {
 
         var book = entityManager.find(Book.class, BOOK_ID_FOR_UPDATE);
 
-        List<Author> authors = book.getAuthors();
+        Set<Author> authors = book.getAuthors();
         authors.clear();
         authors.add(entityManager.find(Author.class, FIRST_AUTHOR_ID));
 
-        List<Genre> genres = book.getGenres();
+        Set<Genre> genres = book.getGenres();
         genres.clear();
         genres.add(entityManager.find(Genre.class, THIRD_GENRE_ID));
 
         book.setName(NEW_BOOK_NAME);
         repository.save(book);
 
-        var booksAfterUpdate = repository.findAll();
-        assertThat(booksAfterUpdate).contains(book);
+        var bookAfterUpdate = repository.findById(BOOK_ID_FOR_UPDATE).orElseThrow();
+        assertThat(bookAfterUpdate)
+                .isEqualToComparingFieldByField(book);
 
     }
 
@@ -123,7 +124,7 @@ class BookRepositoryTest {
 
         var author = entityManager.find(Author.class, FIRST_AUTHOR_ID);
         var genre = entityManager.find(Genre.class, THIRD_GENRE_ID);
-        var notMatchBook = new Book(0, matchBook.getName(), Collections.singletonList(author), Collections.singletonList(genre));
+        var notMatchBook = new Book(matchBook.getName(), Collections.singleton(author), Collections.singleton(genre));
 
         assertThat(repository.isExist(notMatchBook))
                 .isEqualTo(false);

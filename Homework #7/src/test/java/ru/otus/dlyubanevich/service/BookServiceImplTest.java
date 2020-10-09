@@ -30,8 +30,8 @@ class BookServiceImplTest {
 
     private static final String NAME_OF_NEW_BOOK = "new Book";
     private static final long EMPTY_ID = 0;
-    private static final Author AUTHOR = new Author(EMPTY_ID, "First name", "Last name");
-    private static final Genre GENRE = new Genre(EMPTY_ID, "Genre");
+    private static final Author AUTHOR = new Author("First name", "Last name");
+    private static final Genre GENRE = new Genre("Genre");
 
     @MockBean
     private BookRepository repository;
@@ -249,13 +249,12 @@ class BookServiceImplTest {
 
     private Book getNewBook(){
 
-        List<Author> authors = new ArrayList<>();
+        Set<Author> authors = new HashSet<>();
         authors.add(AUTHOR);
-        List<Genre> genres = new ArrayList<>();
+        Set<Genre> genres = new HashSet<>();
         genres.add(GENRE);
 
        return new Book(
-               EMPTY_ID,
                NAME_OF_NEW_BOOK,
                authors,
                genres

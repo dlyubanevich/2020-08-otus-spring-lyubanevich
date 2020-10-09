@@ -51,7 +51,7 @@ class LibraryServiceImplTest {
     private static final long EMPTY_ID = 0;
     private static final Author AUTHOR = new Author(EMPTY_ID, FIRST_NAME_OF_AUTHOR, LAST_NAME_OF_AUTHOR);
     private static final Genre GENRE = new Genre(EMPTY_ID, GENRE_NAME);
-    private static final Book BOOK = new Book(EMPTY_ID, BOOK_NAME, Collections.singletonList(AUTHOR), Collections.singletonList(GENRE));
+    private static final Book BOOK = new Book(BOOK_NAME, Collections.singleton(AUTHOR), Collections.singleton(GENRE));
     private static final Comment COMMENT = new Comment(EMPTY_ID, COMMENT_TEXT, BOOK);
 
     @BeforeEach
@@ -65,7 +65,7 @@ class LibraryServiceImplTest {
 
         var genres = Collections.singletonList(GENRE);
         var authors = Collections.singletonList(AUTHOR);
-        var book = new Book(EMPTY_ID, BOOK_NAME, authors, genres);
+        var book = new Book(BOOK_NAME, Collections.singleton(AUTHOR), Collections.singleton(GENRE));
 
         given(authorService.findByName(FIRST_NAME_OF_AUTHOR, LAST_NAME_OF_AUTHOR)).willReturn(authors);
         given(genreService.findByName(GENRE_NAME)).willReturn(genres);
@@ -182,7 +182,7 @@ class LibraryServiceImplTest {
             var authors = Collections.singletonList(AUTHOR);
             given(authorService.findByName(FIRST_NAME_OF_AUTHOR, LAST_NAME_OF_AUTHOR)).willReturn(authors);
 
-            libraryService.addInfoToTheBook(EMPTY_ID,FIRST_NAME_OF_AUTHOR, LAST_NAME_OF_AUTHOR, null);
+            libraryService.addInfoToTheBook(EMPTY_ID, FIRST_NAME_OF_AUTHOR, LAST_NAME_OF_AUTHOR, null);
 
             verify(authorService, times(1)).findByName(FIRST_NAME_OF_AUTHOR, LAST_NAME_OF_AUTHOR);
             verify(bookService, times(1)).addAuthor(EMPTY_ID, AUTHOR);
@@ -262,8 +262,10 @@ class LibraryServiceImplTest {
     }
 
     private Book getBook(){
-        var genres = Collections.singletonList(GENRE);
-        var authors = Collections.singletonList(AUTHOR);
-        return new Book(EMPTY_ID, BOOK_NAME, authors, genres);
+        return new Book(
+                BOOK_NAME,
+                Collections.singleton(AUTHOR),
+                Collections.singleton(GENRE)
+        );
     }
 }

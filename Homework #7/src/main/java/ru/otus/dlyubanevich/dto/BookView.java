@@ -5,6 +5,7 @@ import ru.otus.dlyubanevich.domain.Author;
 import ru.otus.dlyubanevich.domain.Genre;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Getter
@@ -15,7 +16,7 @@ public class BookView {
     private final List<String> authors;
     private final List<String> genres;
 
-    public BookView(long id, String name, List<Author> authors, List<Genre> genres) {
+    public BookView(long id, String name, Set<Author> authors, Set<Genre> genres) {
         this.id = id;
         this.name = name;
         this.authors = authors.stream()
