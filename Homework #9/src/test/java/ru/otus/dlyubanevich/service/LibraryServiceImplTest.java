@@ -53,49 +53,19 @@ class LibraryServiceImplTest {
     }
 
     @Test
-    @DisplayName("находить автора и жанр по именам и создавать книгу")
-    void shouldFindAuthorAndGenreByTheirNamesAndSaveTheBook() {
-
-        var book = new Book(BOOK_NAME, AUTHOR, GENRE);
-        given(bookService.save(book)).willReturn(book);
-
-        libraryService.addBook(BOOK_NAME, FIRST_NAME_OF_AUTHOR, LAST_NAME_OF_AUTHOR, GENRE_NAME);
-
-        verify(bookService, times(1)).save(book);
-
-    }
-
-//    @Test
-//    @DisplayName("получать все книги из базы")
-//    void shouldGetAllBooks() {
-//
-//        var book = getBook();
-//        List<Book> books = new ArrayList<>();
-//        books.add(book);
-//        given(bookService.getAll()).willReturn(books);
-//
-//        List<BookDto> bookViews = libraryService.getAllBooks();
-//
-//        assertThat(bookViews)
-//                .hasSize(books.size());
-//        verify(bookService, times(1)).getAll();
-//
-//    }
-
-    @Test
-    @DisplayName("получать заполненное представление книги по id")
-    void shouldGetBookViewById() {
+    @DisplayName("получать все книги из базы")
+    void shouldGetAllBooks() {
 
         var book = getBook();
-        given(bookService.findById(EMPTY_ID)).willReturn(book);
+        List<Book> books = new ArrayList<>();
+        books.add(book);
+        given(bookService.getAll()).willReturn(books);
 
-        var bookView = libraryService.findBookById(EMPTY_ID);
+        List<BookDto> bookViews = libraryService.getAllBooks();
 
-        assertThat(bookView)
-                .matches(view -> view.getName().equals(book.getName()))
-                .matches(view -> view.getAuthors().size() == book.getAuthors().size() &&
-                        view.getGenres().size() == book.getGenres().size());
-        verify(bookService, times(1)).findById(EMPTY_ID);
+        assertThat(bookViews)
+                .hasSize(books.size());
+        verify(bookService, times(1)).getAll();
 
     }
 
@@ -104,13 +74,6 @@ class LibraryServiceImplTest {
     void shouldDeleteTheBookById() {
         libraryService.deleteBook(EMPTY_ID);
         verify(bookService, times(1)).delete(EMPTY_ID);
-    }
-
-    @Test
-    @DisplayName("менять название у книги")
-    void shouldChangeTheNameOfTheBook() {
-        libraryService.changeTheNameOfTheBook(EMPTY_ID, BOOK_NAME);
-        verify(bookService, times(1)).changeName(EMPTY_ID, BOOK_NAME);
     }
 
     @Test
@@ -126,44 +89,9 @@ class LibraryServiceImplTest {
 
         var comments = libraryService.getBookComments(EMPTY_ID);
 
-        assertThat(comments.toString())
-                .containsIgnoringCase(COMMENT_TEXT);
-        verify(bookService, times(1)).findById(EMPTY_ID);
+        assertThat(comments).hasSize(1);
+
         verify(commentService, times(1)).findBookComments(EMPTY_ID);
-
-    }
-
-    @Nested
-    @DisplayName("добавлять сведения к книге")
-    class AddInfo{
-
-        @Test
-        @DisplayName("добавлять автора")
-        void shouldAddAuthorToTheBook() {
-
-            libraryService.addInfoToTheBook(EMPTY_ID, FIRST_NAME_OF_AUTHOR, LAST_NAME_OF_AUTHOR, null);
-            verify(bookService, times(1)).addAuthor(EMPTY_ID, AUTHOR);
-
-        }
-
-        @Test
-        @DisplayName("добавлять жанр")
-        void shouldAddGenreToTheBook() {
-
-            libraryService.addInfoToTheBook(EMPTY_ID, null, null, GENRE_NAME);
-            verify(bookService, times(1)).addGenre(EMPTY_ID, GENRE);
-
-        }
-
-        @Test
-        @DisplayName("добавлять автора и жанр")
-        void shouldAddAuthorAndGenreToTheBook() {
-
-            libraryService.addInfoToTheBook(EMPTY_ID, FIRST_NAME_OF_AUTHOR, LAST_NAME_OF_AUTHOR, GENRE_NAME);
-            verify(bookService, times(1)).addAuthor(EMPTY_ID, AUTHOR);
-            verify(bookService, times(1)).addGenre(EMPTY_ID, GENRE);
-
-        }
 
     }
 
@@ -176,6 +104,8 @@ class LibraryServiceImplTest {
         void shouldAddCommentToTheBook() {
 
             var comment = new BookComment(COMMENT_TEXT, EMPTY_ID);
+
+            given(commentService.save(comment)).willReturn(comment);
 
             libraryService.addCommentToTheBook(EMPTY_ID, COMMENT_TEXT);
             verify(commentService, times(1)).save(comment);

@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-public class BookController {
+public class LibraryController {
 
     private final LibraryService libraryService;
 
