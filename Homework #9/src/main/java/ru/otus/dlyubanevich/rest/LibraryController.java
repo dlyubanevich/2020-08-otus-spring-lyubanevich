@@ -26,13 +26,13 @@ public class LibraryController {
         return BookDto.toDto(libraryService.saveBook(book));
     }
 
-    @DeleteMapping("/api/book")
-    public void deleteBook(String bookId){
-        libraryService.deleteBook(bookId);
+    @DeleteMapping("/api/book/{id}")
+    public void deleteBook(@PathVariable String id){
+        libraryService.deleteBook(id);
     }
 
-    @GetMapping("/api/comments")
-    public List<CommentDto> getBookComments(String bookId){
+    @GetMapping("/api/comments/{bookId}")
+    public List<CommentDto> getBookComments(@PathVariable String bookId){
         return libraryService.getBookComments(bookId);
     }
 
