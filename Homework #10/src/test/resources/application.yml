@@ -5,12 +5,8 @@ spring:
       database: library
       port: 0
 
-  shell:
-    interactive:
-      enabled: false
-
 mongock:
-  runner-type: "ApplicationRunner"
+  runner-type: "InitializingBean"
   change-logs-scan-package:
     - ru.otus.dlyubanevich.mongock.changelog
 

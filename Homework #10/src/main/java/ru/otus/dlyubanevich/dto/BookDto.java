@@ -1,21 +1,22 @@
 package ru.otus.dlyubanevich.dto;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import ru.otus.dlyubanevich.domain.Book;
 import ru.otus.dlyubanevich.domain.Genre;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 public class BookDto {
 
-    private final String id;
-    private final String name;
-    private final String authors;
-    private final List<String> genres;
+    private String id;
+    private String name;
+    private String authors;
+    private List<String> genres;
 
     public static BookDto toDto(Book book){
         var authors = book.getAuthors().stream()

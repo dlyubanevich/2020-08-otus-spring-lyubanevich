@@ -55,7 +55,7 @@ public class LibraryServiceImpl implements LibraryService {
     @Override
     public Flux<CommentDto> getBookComments(String bookId) {
         return bookCommentService.findBookComments(bookId)
-                .flatMap(bookComment -> Flux.just(CommentDto.toDto(bookComment)));
+                .map(CommentDto::toDto);
     }
 
 }
