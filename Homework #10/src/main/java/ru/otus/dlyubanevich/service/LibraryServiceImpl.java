@@ -28,7 +28,7 @@ public class LibraryServiceImpl implements LibraryService {
     @Override
     public Flux<BookDto> getAllBooks() {
         return bookService.getAll()
-                .flatMap((book) -> Flux.just(BookDto.toDto(book)));
+                .map(BookDto::toDto);
     }
 
     @Transactional
@@ -36,8 +36,9 @@ public class LibraryServiceImpl implements LibraryService {
     public Mono<Void> deleteBook(String id) {
         Mono<Void> deleteBookComments = bookCommentService.deleteAllByBookId(id);
         Mono<Void> deleteBook = bookService.delete(id);
-        return Mono.zip(deleteBookComments, deleteBook)
-            .then(Mono.empty());
+        return Mono
+                .from(deleteBookComments).then(deleteBook);
+
     }
 
     @Transactional

@@ -49,7 +49,7 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
-    public Mono<Void> addAuthor(String id, Author author) {
+    public Mono<Book> addAuthor(String id, Author author) {
         return Mono.from(
             updateAndSaveTheBookOrThrowBookNotFoundException(id, null, author, null)
         );
@@ -57,7 +57,7 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
-    public Mono<Void> addGenre(String id, Genre genre) {
+    public Mono<Book> addGenre(String id, Genre genre) {
         return Mono.from(
             updateAndSaveTheBookOrThrowBookNotFoundException(id, null, null, genre)
         );
@@ -65,17 +65,16 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
-    public Mono<Void> changeName(String id, String name) {
+    public Mono<Book> changeName(String id, String name) {
         return Mono.from(
             updateAndSaveTheBookOrThrowBookNotFoundException(id, name, null, null)
         );
     }
 
-    private Mono<Void> updateAndSaveTheBookOrThrowBookNotFoundException(String id, String name, Author author, Genre genre){
-        return Mono.from(bookRepository.findById(id)
+    private Mono<Book> updateAndSaveTheBookOrThrowBookNotFoundException(String id, String name, Author author, Genre genre){
+        return Mono.from(bookRepository.findById(id))
             .switchIfEmpty(Mono.error(new BookNotFoundException("There is no book by id " + id)))
-            .doOnSuccess((book) -> updateAndSaveTheBook(book, name, author, genre))
-            .then(Mono.empty()));
+            .doOnSuccess((book) -> updateAndSaveTheBook(book, name, author, genre));
     }
 
     private void updateAndSaveTheBook(Book book, String name, Author author, Genre genre){
@@ -88,6 +87,6 @@ public class BookServiceImpl implements BookService {
         if (genre != null){
             book.getGenres().add(genre);
         }
-        bookRepository.save(book).subscribe();
+        bookRepository.save(book);
     }
 }

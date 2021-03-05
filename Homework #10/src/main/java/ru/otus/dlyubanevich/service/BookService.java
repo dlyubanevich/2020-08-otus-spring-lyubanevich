@@ -13,8 +13,8 @@ public interface BookService {
     Flux<Book> findByName(String name);
     Mono<Book> findById(String id);
     Mono<Void> delete(String id);
-    Mono<Void> addAuthor(String id, Author author);
-    Mono<Void> addGenre(String id, Genre genre);
-    Mono<Void> changeName(String id, String name);
+    Mono<Book> addAuthor(String id, Author author);
+    Mono<Book> addGenre(String id, Genre genre);
+    Mono<Book> changeName(String id, String name);
 
 }

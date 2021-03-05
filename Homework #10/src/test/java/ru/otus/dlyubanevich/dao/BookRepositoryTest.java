@@ -29,7 +29,7 @@ class BookRepositoryTest {
     void shouldFindAllOfBooks() {
 
         var book = new Book(BOOK_ID, BOOK_NAME, AUTHOR, GENRE);
-        repository.save(book).subscribe();
+        repository.save(book).block();
 
         var books = repository.findAll();
         StepVerifier
@@ -53,7 +53,7 @@ class BookRepositoryTest {
                 .expectComplete()
                 .verify();
 
-        repository.deleteAll().subscribe();
+        repository.deleteAll().block();
 
     }
 

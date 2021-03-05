@@ -25,7 +25,7 @@ class BookCommentRepositoryTest {
     @DisplayName("находить все комментарии для книги")
     void shouldFindCommentsToTheBook() {
         var comment = new BookComment(COMMENT_TEXT, BOOK_ID);
-        repository.save(comment).subscribe();
+        repository.save(comment).block();
 
         var comments = repository.findByBookId(BOOK_ID);
         StepVerifier
@@ -34,7 +34,7 @@ class BookCommentRepositoryTest {
                 .expectComplete()
                 .verify();
 
-        repository.deleteAllByBookId(BOOK_ID).subscribe();
+        repository.deleteAllByBookId(BOOK_ID).block();
 
     }
 
@@ -51,7 +51,7 @@ class BookCommentRepositoryTest {
                 .expectComplete()
                 .verify();
 
-        repository.deleteAllByBookId(BOOK_ID).subscribe();
+        repository.deleteAllByBookId(BOOK_ID).block();
     }
 
     @Test
@@ -59,8 +59,8 @@ class BookCommentRepositoryTest {
     void shouldDeleteBookCommentByBookId() {
 
         var comment = new BookComment(COMMENT_TEXT, BOOK_ID);
-        repository.save(comment).subscribe();
-        repository.deleteAllByBookId(BOOK_ID).subscribe();
+        repository.save(comment).block();
+        repository.deleteAllByBookId(BOOK_ID).block();
 
         var commentsAfterDelete = repository.findByBookId(BOOK_ID);
         StepVerifier
