@@ -74,10 +74,10 @@ public class BookServiceImpl implements BookService {
     private Mono<Book> updateAndSaveTheBookOrThrowBookNotFoundException(String id, String name, Author author, Genre genre){
         return Mono.from(bookRepository.findById(id))
             .switchIfEmpty(Mono.error(new BookNotFoundException("There is no book by id " + id)))
-            .doOnSuccess((book) -> updateAndSaveTheBook(book, name, author, genre));
+            .flatMap((book) -> updateAndSaveTheBook(book, name, author, genre));
     }
 
-    private void updateAndSaveTheBook(Book book, String name, Author author, Genre genre){
+    private Mono<Book> updateAndSaveTheBook(Book book, String name, Author author, Genre genre){
         if (name != null){
             book.setName(name);
         }
@@ -87,6 +87,6 @@ public class BookServiceImpl implements BookService {
         if (genre != null){
             book.getGenres().add(genre);
         }
-        bookRepository.save(book);
+        return bookRepository.save(book);
     }
 }
