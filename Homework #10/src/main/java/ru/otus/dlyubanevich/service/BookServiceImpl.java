@@ -50,25 +50,19 @@ public class BookServiceImpl implements BookService {
     @Transactional
     @Override
     public Mono<Book> addAuthor(String id, Author author) {
-        return Mono.from(
-            updateAndSaveTheBookOrThrowBookNotFoundException(id, null, author, null)
-        );
+        return updateAndSaveTheBookOrThrowBookNotFoundException(id, null, author, null);
     }
 
     @Transactional
     @Override
     public Mono<Book> addGenre(String id, Genre genre) {
-        return Mono.from(
-            updateAndSaveTheBookOrThrowBookNotFoundException(id, null, null, genre)
-        );
+        return updateAndSaveTheBookOrThrowBookNotFoundException(id, null, null, genre);
     }
 
     @Transactional
     @Override
     public Mono<Book> changeName(String id, String name) {
-        return Mono.from(
-            updateAndSaveTheBookOrThrowBookNotFoundException(id, name, null, null)
-        );
+        return updateAndSaveTheBookOrThrowBookNotFoundException(id, name, null, null);
     }
 
     private Mono<Book> updateAndSaveTheBookOrThrowBookNotFoundException(String id, String name, Author author, Genre genre){
