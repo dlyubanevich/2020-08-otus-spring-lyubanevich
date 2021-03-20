@@ -7,17 +7,17 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
-import ru.otus.dlyubanevich.service.LibraryUserDetailService;
 
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    private final LibraryUserDetailService libraryUserDetailService;
-    private final AuthenticationEntryPoint AuthenticationEntryPoint;
+    private final UserDetailsService UserDetailsService;
+    private final AuthenticationEntryPoint authenticationEntryPoint;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -34,7 +34,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
            .cors().and().csrf().disable()
                 .exceptionHandling()
-                .authenticationEntryPoint(AuthenticationEntryPoint)
+                .authenticationEntryPoint(authenticationEntryPoint)
            .and()
                 .authorizeRequests()
                 .antMatchers("/api/auth").permitAll()
@@ -44,7 +44,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(libraryUserDetailService);
+        auth.userDetailsService(UserDetailsService);
     }
 
 }

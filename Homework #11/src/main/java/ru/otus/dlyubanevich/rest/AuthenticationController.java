@@ -18,7 +18,7 @@ public class AuthenticationController {
     private final AuthenticationManager authenticationManager;
 
     @PostMapping("/api/auth")
-    public ResponseEntity authenticateUser(@RequestBody User user){
+    public ResponseEntity<User> authenticateUser(@RequestBody User user){
 
         Authentication request = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(user.getLogin(), user.getPassword())
