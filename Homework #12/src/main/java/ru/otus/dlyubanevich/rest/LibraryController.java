@@ -2,7 +2,6 @@ package ru.otus.dlyubanevich.rest;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import ru.otus.dlyubanevich.domain.Book;
 import ru.otus.dlyubanevich.dto.CommentDto;
