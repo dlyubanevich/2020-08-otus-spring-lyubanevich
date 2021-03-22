@@ -28,7 +28,6 @@ public class LibraryController {
     }
 
     @DeleteMapping("/api/book/{id}")
-    @Secured("ADMIN")
     public void deleteBook(@PathVariable String id){
         libraryService.deleteBook(id);
     }
