@@ -1,0 +1,28 @@
+spring:
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: Footystats
+
+  batch:
+    job:
+      enabled: false
+    shell:
+      interactive:
+        enabled: true
+
+  datasource:
+    url: jdbc:h2:mem:testdb
+    schema: schema.sql
+    initialization-mode: always
+    driver-class-name: org.h2.Driver
+
+mongock:
+  runner-type: "InitializingBean"
+  change-logs-scan-package:
+    - ru.otus.dlyubanevich.changelog
+
+logging:
+  level:
+    root: ERROR
