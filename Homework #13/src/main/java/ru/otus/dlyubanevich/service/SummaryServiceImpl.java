@@ -34,15 +34,6 @@ public class SummaryServiceImpl implements SummaryService {
         );
     }
 
-    @Transactional
-    @Override
-    public void save(Summary summary) {
-        summary.setTeam(saveTeamIfNotExist(summary.getTeam()));
-        summary.setSeason(saveSeasonIfNotExist(summary.getSeason()));
-        summary.setLeague(saveLeagueIfNotExist(summary.getLeague()));
-        summaryRepository.save(summary);
-    }
-
     @Transactional(readOnly = true)
     @Override
     public List<SummaryDto> getAllSummary() {
@@ -65,30 +56,6 @@ public class SummaryServiceImpl implements SummaryService {
     @Override
     public Team findByName(Team team) {
         return teamRepository.findByName(team.getName());
-    }
-
-    private League saveLeagueIfNotExist(League league) {
-        var savedLeague = leagueRepository.findByName(league.getName());
-        if (savedLeague == null){
-            savedLeague = leagueRepository.save(league);
-        }
-        return savedLeague;
-    }
-
-    private Team saveTeamIfNotExist(Team team) {
-        var savedTeam = teamRepository.findByName(team.getName());
-        if (savedTeam == null){
-            savedTeam = teamRepository.save(team);
-        }
-        return savedTeam;
-    }
-
-    private Season saveSeasonIfNotExist(Season season) {
-        var savedSeason = seasonRepository.findByName(season.getName());
-        if (savedSeason == null){
-            savedSeason = seasonRepository.save(season);
-        }
-        return savedSeason;
     }
 
 }
