@@ -10,4 +10,7 @@ public interface SummaryService {
     Summary transform(Statistic statistic);
     void save(Summary summary);
     List<SummaryDto> getAllSummary();
+    League findByName(League league);
+    Season findByName(Season season);
+    Team findByName(Team team);
 }

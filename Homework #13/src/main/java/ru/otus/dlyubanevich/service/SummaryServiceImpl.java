@@ -49,7 +49,25 @@ public class SummaryServiceImpl implements SummaryService {
         return summaryRepository.findAll().stream().map(SummaryDto::new).collect(Collectors.toList());
     }
 
-    public League saveLeagueIfNotExist(League league) {
+    @Transactional(readOnly = true)
+    @Override
+    public League findByName(League league) {
+        return leagueRepository.findByName(league.getName());
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Season findByName(Season season) {
+        return seasonRepository.findByName(season.getName());
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Team findByName(Team team) {
+        return teamRepository.findByName(team.getName());
+    }
+
+    private League saveLeagueIfNotExist(League league) {
         var savedLeague = leagueRepository.findByName(league.getName());
         if (savedLeague == null){
             savedLeague = leagueRepository.save(league);
@@ -57,7 +75,7 @@ public class SummaryServiceImpl implements SummaryService {
         return savedLeague;
     }
 
-    public Team saveTeamIfNotExist(Team team) {
+    private Team saveTeamIfNotExist(Team team) {
         var savedTeam = teamRepository.findByName(team.getName());
         if (savedTeam == null){
             savedTeam = teamRepository.save(team);
@@ -65,7 +83,7 @@ public class SummaryServiceImpl implements SummaryService {
         return savedTeam;
     }
 
-    public Season saveSeasonIfNotExist(Season season) {
+    private Season saveSeasonIfNotExist(Season season) {
         var savedSeason = seasonRepository.findByName(season.getName());
         if (savedSeason == null){
             savedSeason = seasonRepository.save(season);
