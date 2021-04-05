@@ -1,12 +1,13 @@
 package ru.otus.dlyubanevich.service;
 
 import org.apache.commons.lang3.RandomUtils;
+import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.stereotype.Service;
 import ru.otus.dlyubanevich.domain.ControversialEpisode;
 import ru.otus.dlyubanevich.domain.Decision;
 
 @Service
-public class VideoOperationRoomService{
+public class VideoOperationRoomService {
 
     public Decision watchClosely(ControversialEpisode episode) {
 
