@@ -1,0 +1,15 @@
+spring:
+  data:
+    mongodb:
+      database: ${MONGO_DB}
+      host: ${MONGO_HOST}
+      port: ${MONGO_PORT}
+
+mongock:
+  runner-type: "InitializingBean"
+  change-logs-scan-package:
+    - ru.otus.dlyubanevich.mongock.changelog
+
+logging:
+  level:
+    root: ERROR
