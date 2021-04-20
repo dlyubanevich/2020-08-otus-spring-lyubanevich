@@ -1,9 +1,8 @@
 spring:
   data:
     mongodb:
-      database: ${MONGO_DB}
-      host: ${MONGO_HOST}
-      port: ${MONGO_PORT}
+      uri: mongodb://mongodb:27017
+      database: library
 
 mongock:
   runner-type: "InitializingBean"
