@@ -1,26 +1,28 @@
 version: '3'
 services:
-  mongo:
-    image: mongo:latest
-    container_name: mongodb
-    restart: unless-stopped
-    ports:
-      - 27017:27017
-    volumes:
-      - mongodb_data:/data/db
-    networks:
-      - app-network
-
   library:
     container_name: library
     build:
       context: .
       dockerfile: Dockerfile
-    restart: unless-stopped
+    restart: always
     ports:
       - 8080:8080
-    links:
+    environment:
+      - MONGO_URL=mongodb://mongodb:27017/library
+    depends_on:
       - mongo
+    networks:
+      - app-network
+
+  mongo:
+    image: mongo:latest
+    container_name: mongodb
+    restart: always
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_data:/data/db
     networks:
       - app-network
 
