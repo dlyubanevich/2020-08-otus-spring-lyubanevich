@@ -1,0 +1,42 @@
+spring:
+  data:
+    mongodb:
+      uri: ${MONGO_URL}
+      #host: localhost
+      #port: 27017
+      #database: library
+
+mongock:
+  runner-type: "InitializingBean"
+  change-logs-scan-package:
+    - ru.otus.dlyubanevich.mongock.changelog
+
+logging:
+  level:
+    root: ERROR
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+  endpoint:
+    health:
+      show-details: always
+
+  health:
+    defaults:
+      enabled: true
+
+actuator:
+  health:
+    uri: "http://localhost:8080/api/library"
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 3000
