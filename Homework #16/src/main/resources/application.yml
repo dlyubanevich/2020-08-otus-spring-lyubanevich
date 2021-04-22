@@ -1,0 +1,13 @@
+spring:
+  data:
+    mongodb:
+      uri: ${MONGO_URL}
+
+mongock:
+  runner-type: "InitializingBean"
+  change-logs-scan-package:
+    - ru.otus.dlyubanevich.mongock.changelog
+
+logging:
+  level:
+    root: ERROR
